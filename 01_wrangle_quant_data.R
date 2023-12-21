@@ -1,14 +1,14 @@
 # Recreation of Figure for Annelisa
 library(tidyverse)
 
-project_dir = "/hpc/pmc_vanheesch/projects/Jip/Annelisa_counts"
+project_dir = "/hpc/pmc_vanheesch/projects/Jip/counts"
 
 # Read cohort metadata
-annelisa_meta <-
-  read.delim(paste(project_dir, "Annelisa_cohort.txt", sep = "/"))
+meta <-
+  read.delim(paste(project_dir, "cohort.txt", sep = "/"))
 
 # Grab MR1 count info
-mr1l <- pbapply::pbapply(annelisa_meta, 1, function(x) {
+mr1l <- pbapply::pbapply(meta, 1, function(x) {
   mr1 <-
     data.table::fread(paste(project_dir, x[1], sep = "/"),
                       sep = "\t",
@@ -24,7 +24,7 @@ mr1 <- do.call(plyr::rbind.fill, mr1l)
 # and rerun those with the correct location
 table(mr1$GeneName %in% c("MR1", "HLA-A", "HLA-B", "HLA-C"))
 to_rerun <-
-  subset(annelisa_meta, Biomaterial.Id %in% mr1[which(!(mr1$GeneName %in% c("MR1", "HLA-A", "HLA-B", "HLA-C"))),]$Biomaterial.Id)
+  subset(meta, Biomaterial.Id %in% mr1[which(!(mr1$GeneName %in% c("MR1", "HLA-A", "HLA-B", "HLA-C"))),]$Biomaterial.Id)
 mr1_correct <-
   mr1[which(mr1$GeneName %in% c("MR1", "HLA-A", "HLA-B", "HLA-C")),]
 
@@ -58,7 +58,7 @@ mr1_full <-
 
 # Connect to interesting metadata
 plotdata <-
-  dplyr::left_join(mr1_full, annelisa_meta[, c("Biomaterial.Id", "V2")])
+  dplyr::left_join(mr1_full, meta[, c("Biomaterial.Id", "V2")])
 unique(plotdata$V2)
 
 # Edit sample labels for plotting
