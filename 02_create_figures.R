@@ -1,7 +1,7 @@
 # Recreation of Figure for Annelisa
 library(tidyverse)
 
-project_dir = "/hpc/pmc_vanheesch/projects/Jip/Annelisa_counts"
+project_dir = "/hpc/pmc_vanheesch/projects/Jip/counts"
 
 # Load quantification data
 plotdata_wide <- read.delim(
